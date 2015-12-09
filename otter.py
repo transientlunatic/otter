@@ -1,7 +1,15 @@
+import uuid
+import os
+import matplotlib.pyplot as plt
+
 class Otter():
-    def __init__(self, filename, title):
+    def __init__(self, filename, meta):
         self.reportfile= open(filename,"w")
-        self.title = title
+        self.reportfolder = filename+"_files"
+        self.foldername = os.path.basename(filename)+"_files/"
+        if not os.path.exists(self.reportfolder):
+            os.makedirs(self.reportfolder)
+        self.meta = meta
         self.write_preamble()
         
     def _write(self, text):
@@ -23,7 +31,7 @@ class Otter():
         self._write(html_str)
 
         html_str="""
-        <title>{}</title>
+        <title>{0[title]}</title>
 
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -32,7 +40,7 @@ class Otter():
         </head>
         <body>
         <div class="container">
-        """.format(self.title)
+        """.format(self.meta)
         self._write(html_str)
 
     def write_footer(self):
@@ -52,9 +60,10 @@ class Otter():
         <div class="row">
 
         <div class="page-header">
-           <h1>{} <small>Subtext for header</small></h1>
+           <h1>{0[title]} <small>{0[subtitle]}</small></h1>
+        <p><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {0[author]}</p>
         </div>
-        """.format(self.title)
+        """.format(self.meta)
         self._write(html_str)
 
     def write_row(self, text):
@@ -65,32 +74,36 @@ class Otter():
         """.format(text)
         self._write(html_str)
 
+    def write_image(self, url):
+        html_str= """
+        <div class="row">
+          <img src="{}" style="max-width: 100%;" class="img-responsive"></img>
+        </div>
+        """.format(url)
+        self._write(html_str)
 
-# <table class="table">
-#      <tr>
-#        <th>Number</th>
-#        <th>Square</th>
-#      </tr>
-#      <indent>
-
-#        <tr>
-#          <td><%= i %></td>
-#          <td><%= i**2 %></td>
-#        </tr>
-#      </indent>
-# </table>
-# </div>
-# </div>
-# """
-# html_file.write(html_str)
-
-# html_str = """
-#   </body>
-# </html>
-# """
+    def write_plot(self, filename=None):
+        if filename==None:
+            filename = "{}.png".format(uuid.uuid4().hex)
+        plt.savefig(self.reportfolder+"/"+filename, dpi=300)
+        self.write_image(self.foldername+filename)
 
 
-report = Otter('newtest.html', "Test Report")
+report = Otter('newtest.html', {"title":"Test Report", "author":"Daniel Williams", "subtitle":""})
 report.write_page_header()
 report.write_row("Hello world.")
+
+import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+
+t = np.linspace(0,10, 1000)
+x = np.sin(t)
+
+plt.plot(t,x)
+
+#plt.savefig('plot.png')
+#report.write_image('plot.png')
+report.write_plot()
+
 report.write_footer()
