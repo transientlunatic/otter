@@ -13,7 +13,7 @@ Otter
         :alt: Documentation Status
 
 
-The simple HTML report generator for Pythin jobs.
+The simple HTML report generator for Python jobs.
 
 * Free software: ISC license
 * Documentation: https://otter.readthedocs.org.
