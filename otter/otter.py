@@ -93,10 +93,13 @@ class Otter():
         """.format(url)
         self._write(html_str)
 
-    def write_plot(self, filename=None):
+    def write_plot(self, figure=None, filename=None):
         if filename==None:
             filename = "{}.png".format(uuid.uuid4().hex)
-        plt.savefig(self.reportfolder+"/"+filename, dpi=300)
+	if figure:
+        	figure.savefig(self.reportfolder+"/"+filename, dpi=300)
+	else:
+		plt.savefig(self.reportfolder+"/"+filename, dpi=300)
         self.write_image(self.foldername+filename)
 
 
