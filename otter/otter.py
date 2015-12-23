@@ -47,6 +47,11 @@ class Otter():
 
     def write_footer(self):
         html_str="""
+	<hr />
+	<div class="row">
+		<div class="col-md-4">Report created by Otter.</div>
+	</div>
+
         </div> <!-- close the whole container -->
         </body>
         </html>
@@ -89,3 +94,5 @@ class Otter():
             filename = "{}.png".format(uuid.uuid4().hex)
         plt.savefig(self.reportfolder+"/"+filename, dpi=300)
         self.write_image(self.foldername+filename)
+
+

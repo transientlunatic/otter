@@ -23,11 +23,11 @@ test_requirements = [
 ]
 
 setup(
-    name='otter',
-    version='0.0.1',
-    description="The simple HTML report generator for Pythin jobs.",
+    name='otter-report',
+    version='0.0.2',
+    description="The simple HTML report generator for Python jobs.",
     long_description=readme + '\n\n' + history,
-    author="Daniel WIlliams",
+    author="Daniel Williams",
     author_email='d.williams.2@research.gla.ac.uk',
     url='https://github.com/transientlunatic/otter',
     packages=[
