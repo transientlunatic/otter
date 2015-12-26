@@ -9,7 +9,21 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 class Otter():
+    """Otter is a pythonic report writing system designed to produce HTML
+    reports for long-running or complex jobs where and iPython
+    notebook would be an impractical way of presenting information.
+    """
     def __init__(self, filename, meta):
+        """
+        An Otter report is created by this class.
+
+        Parameters
+        ----------
+        filename : str
+           The path to the location of the report, for example `/home/me/www/report.html`.
+        meta : dict
+           A dictionary of metadata. This is likely to change very soon, but at present a dictionary is required for the title, subtitle, and author's name of the report.
+        """
         self.reportfile= open(filename,"w")
         self.reportfolder = filename+"_files"
         self.foldername = os.path.basename(filename)+"_files/"

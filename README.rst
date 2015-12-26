@@ -14,7 +14,8 @@ Otter
 
 
 Otter is a simple HTML report generator for Python jobs. Otter was
-designed to produce reports on long-running jobs on 
+designed to produce reports on long-running jobs on remote machines,
+and send them to a web server.
 
 * Free software: ISC license
 * Documentation: https://otter.readthedocs.org.
@@ -22,7 +23,8 @@ designed to produce reports on long-running jobs on
 Features
 --------
 
-* TODO
+* TODO Add support for pandas data tables
+* TODO Add support for custom headers and footers
 
 Credits
 ---------
