@@ -2,8 +2,8 @@
 Otter
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/otter.svg
-        :target: https://pypi.python.org/pypi/otter
+.. image:: https://img.shields.io/pypi/v/otter-report.svg
+        :target: https://pypi.python.org/pypi/otter-report
 
 .. image:: https://img.shields.io/travis/transientlunatic/otter.svg
         :target: https://travis-ci.org/transientlunatic/otter
@@ -13,7 +13,8 @@ Otter
         :alt: Documentation Status
 
 
-The simple HTML report generator for Python jobs.
+Otter is a simple HTML report generator for Python jobs. Otter was
+designed to produce reports on long-running jobs on 
 
 * Free software: ISC license
 * Documentation: https://otter.readthedocs.org.
