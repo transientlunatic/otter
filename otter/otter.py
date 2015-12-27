@@ -99,6 +99,16 @@ class Otter():
         """.format(text)
         self._write(html_str)
 
+    def write_header(self, level, text):
+        html_str= """
+        <div class="row">
+        <h{0}> 
+          {1}
+        </h{0}
+        </div>
+        """.format(level,text)
+        self._write(html_str)
+
     def write_image(self, url):
         html_str= """
         <div class="row">
