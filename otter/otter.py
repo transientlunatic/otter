@@ -130,6 +130,16 @@ class Otter():
         """.format(url)
         self._write(html_str)
 
+    def write_breadcrumb(self, crumbs):
+        start ="""
+        <ol class="breadcrumb">
+        """
+        self._write(start)
+        for level in crumbs:
+            crumb, link = level[0], level[1]
+            self._write("""<li><a href="{0}">{1}</a></li>""".format(link, crumb))
+        self._write("""</ol>""")
+        
     def write_warning(self, warning, text):
         """
         <div class="row">
