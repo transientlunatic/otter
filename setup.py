@@ -16,7 +16,7 @@ with open('HISTORY.rst') as history_file:
 
 requirements = [
     # TODO: put package requirements here
-    matplotlib
+    'matplotlib'
 ]
 
 test_requirements = [
@@ -25,7 +25,7 @@ test_requirements = [
 
 setup(
     name='otter-report',
-    version='0.0.5',
+    version='0.0.6',
     description="The simple HTML report generator for Python jobs.",
     long_description=readme + '\n\n' + history,
     author="Daniel Williams",
