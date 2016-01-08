@@ -117,7 +117,7 @@ class Otter():
         <div class="row">
         <h{0}> 
           {1}
-        </h{0}
+        </h{0}>
         </div>
         """.format(level,text)
         self._write(html_str)
