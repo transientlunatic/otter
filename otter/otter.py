@@ -141,11 +141,12 @@ class Otter():
         self._write("""</ol>""")
         
     def write_warning(self, warning, text):
-        """
+        html_str = """
         <div class="row">
         <div class="alert alert-{}" role="alert">{}</div>
         </div>
         """.format(warning,text)
+        self._write(html_str)
 
     def write_plot(self, figure=None, filename=None):
         if filename==None:
