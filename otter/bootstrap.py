@@ -53,7 +53,7 @@ class Row():
         return self.columns[i]
     
     def __setitem__(self, i, item):
-        self.columns[i] = item
+        self.columns[i].content = item
         
     def __repr__(self):
         output = ''
@@ -74,12 +74,10 @@ class Column():
 
     def __iadd__(self, item):
         self.__add__(item)
+        return self.content
         
     def __add__(self, item):
-        self.content += item
-
-    def __set__(self, instance, item):
-        self.content = item
+        self.content += str(item)
 
     def __repr__(self):
         output = ''
