@@ -3,6 +3,8 @@
 import uuid
 import os
 
+from jinja2 import Template, Environment, FileSystemLoader
+
 import matplotlib as mpl
 mpl.use('Agg')
 
@@ -13,7 +15,7 @@ class Otter():
     reports for long-running or complex jobs where and iPython
     notebook would be an impractical way of presenting information.
     """
-    def __init__(self, filename, meta):
+    def __init__(self, filename, theme, meta):
         """
         An Otter report is created by this class.
 
@@ -24,6 +26,8 @@ class Otter():
         meta : dict
            A dictionary of metadata. This is likely to change very soon, but at present a dictionary is required for the title, subtitle, and author's name of the report.
         """
+
+        self.env = Environment(loader=FileSystemLoader(theme))
         
         self.reportfolder = filename+"_files"
         self.foldername = os.path.basename(filename)+"_files/"
@@ -31,7 +35,23 @@ class Otter():
             os.makedirs(self.reportfolder)
         self.reportfile= open(filename,"w")
         self.meta = meta
+
+        self.items = []
+        
         self.write_preamble()
+
+    def __add__(self, item):
+        return self.add(item)
+        
+    def add(self, item):
+        self.items.append(item)
+        return item
+
+    def show(self):
+        html = ''
+        for item in self.items:
+            html += repr(item)
+        self._write(html)
         
     def _write(self, text):
         self.reportfile.write(text)
@@ -49,68 +69,18 @@ class Otter():
             os.mkdir(path)
     
     def write_preamble(self):
-        html_str = """
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
-        """
-        self._write(html_str)
-
-        html_str="""
-        <title>{0[title]}</title>
-
-        <!-- Bootstrap core CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-        
-        </head>
-        <body>
-        <div class="container">
-        """.format(self.meta)
-        self._write(html_str)
+        head = self.env.get_template('head.html')
+        self._write(head.render(meta=self.meta))
 
     def write_footer(self):
-        html_str="""
-	<hr />
-	<div class="row">
-		<div class="col-md-4">Report created by Otter.</div>
-	</div>
-
-        </div> <!-- close the whole container -->
-        </body>
-        </html>
-        
-        """
-        self._write(html_str)
+        footer = self.env.get_template('footer.html')
+        self._write(footer.render(meta=self.meta))
         self.reportfile.close()
 
 
     def write_page_header(self):
-        
-        html_str = """
-        <div class="row">
-
-        <div class="page-header">
-           <h1>{0[title]} <small>{0[subtitle]}</small></h1>
-        <p><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {0[author]}</p>
-        </div>
-        """.format(self.meta)
-        self._write(html_str)
-
-    def write_row(self, text):
-        html_str= """
-        <div class="row">
-          {}
-        </div>
-        """.format(text)
-        self._write(html_str)
+        header = self.env.get_template('header.html')
+        self._write(header.render(meta=self.meta))
 
     def write_header(self, level, text):
         html_str= """
