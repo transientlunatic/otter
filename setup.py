@@ -25,7 +25,7 @@ test_requirements = [
 
 setup(
     name='otter-report',
-    version='0.0.10',
+    version='0.1.0',
     description="The simple HTML report generator for Python jobs.",
     long_description=readme + '\n\n' + history,
     author="Daniel Williams",
