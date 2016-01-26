@@ -3,6 +3,8 @@
 import uuid
 import os
 
+import ConfigParser
+
 from jinja2 import Template, Environment, FileSystemLoader
 
 import matplotlib as mpl
@@ -15,7 +17,7 @@ class Otter():
     reports for long-running or complex jobs where and iPython
     notebook would be an impractical way of presenting information.
     """
-    def __init__(self, filename, theme, meta):
+    def __init__(self, filename, theme, **kwargs):
         """
         An Otter report is created by this class.
 
@@ -27,6 +29,16 @@ class Otter():
            A dictionary of metadata. This is likely to change very soon, but at present a dictionary is required for the title, subtitle, and author's name of the report.
         """
 
+        # Attempt to load in default meta data from a config file
+        # At the moment just the current directory, but should
+        # extend to look in home directory and environment variable location too
+
+        config = ConfigParser.ConfigParser()
+        config.read('otter.cfg')
+        self.meta = {}
+        for option in config.options('meta'):
+            self.meta[option] = config.get('meta', option)
+        
         self.env = Environment(loader=FileSystemLoader(theme))
         
         self.reportfolder = filename+"_files"
@@ -34,11 +46,8 @@ class Otter():
         if not os.path.exists(self.reportfolder):
             os.makedirs(self.reportfolder)
         self.reportfile= open(filename,"w")
-        self.meta = meta
-
+        self.meta.update(kwargs)
         self.items = []
-        
-        self.write_preamble()
 
     def __add__(self, item):
         return self.add(item)
@@ -51,7 +60,8 @@ class Otter():
         html = ''
         for item in self.items:
             html += repr(item)
-        self._write(html)
+        output_html = self.env.get_template('body.html').render(meta=self.meta, body=html)
+        self._write(output_html)
         
     def _write(self, text):
         self.reportfile.write(text)
@@ -68,30 +78,6 @@ class Otter():
         if not os.path.exists(path):
             os.mkdir(path)
     
-    def write_preamble(self):
-        head = self.env.get_template('head.html')
-        self._write(head.render(meta=self.meta))
-
-    def write_footer(self):
-        footer = self.env.get_template('footer.html')
-        self._write(footer.render(meta=self.meta))
-        self.reportfile.close()
-
-
-    def write_page_header(self):
-        header = self.env.get_template('header.html')
-        self._write(header.render(meta=self.meta))
-
-    def write_header(self, level, text):
-        html_str= """
-        <div class="row">
-        <h{0}> 
-          {1}
-        </h{0}>
-        </div>
-        """.format(level,text)
-        self._write(html_str)
-
     def write_image(self, url):
         html_str= """
         <div class="row">
@@ -99,16 +85,6 @@ class Otter():
         </div>
         """.format(url)
         self._write(html_str)
-
-    def write_breadcrumb(self, crumbs):
-        start ="""
-        <ol class="breadcrumb">
-        """
-        self._write(start)
-        for level in crumbs:
-            crumb, link = level[0], level[1]
-            self._write("""<li><a href="{0}">{1}</a></li>""".format(link, crumb))
-        self._write("""</ol>""")
         
     def write_warning(self, warning, text):
         html_str = """
