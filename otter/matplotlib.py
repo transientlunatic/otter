@@ -16,10 +16,10 @@ class Figure():
         	figure.savefig(report.reportfolder+"/"+filename, dpi=300)
 	else:
 		plt.savefig(self.reportfolder+"/"+filename, dpi=300)
-        self.write_image(report.foldername+filename)
+        self.url = report.foldername+filename
     
-    def write_image(self, url):
+    def __repr__(self):
         html_str= """
           <img src="{}" style="max-width: 100%;" class="img-responsive"></img>
-        """.format(url)
-        self._write(html_str)
+        """.format(self.url)
+        return html_str
