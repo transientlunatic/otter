@@ -19,7 +19,5 @@ class Figure():
         self.url = report.foldername+filename
     
     def __repr__(self):
-        html_str= """
-          <img src="{}" style="max-width: 100%;" class="img-responsive"></img>
-        """.format(self.url)
+        html_str= """<img src="{}" style="max-width: 100%;" class="img-responsive"></img>""".format(self.url)
         return html_str
