@@ -9,13 +9,13 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 class Figure():
-    def __init__(self, report, figure=None, filename=None):
+    def __init__(self, report, figure=None, filename=None, dpi=300):
         if filename==None:
             filename = "{}.png".format(uuid.uuid4().hex)
 	if figure:
-        	figure.savefig(report.reportfolder+"/"+filename, dpi=300)
+        	figure.savefig(report.reportfolder+"/"+filename, dpi=dpi)
 	else:
-		plt.savefig(self.reportfolder+"/"+filename, dpi=300)
+		plt.savefig(self.reportfolder+"/"+filename, dpi=dpi)
         self.url = report.foldername+filename
     
     def __repr__(self):
