@@ -3,8 +3,8 @@ Implements an interface with the Matplotlib plotting library in order to add plo
 """
 
 import uuid
-import matplotlib as mpl
-mpl.use('Agg')
+import matplotlib
+matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
 
