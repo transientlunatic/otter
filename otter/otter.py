@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import uuid
+#import uuid
 import os
 
 import ConfigParser
 
 from jinja2 import Template, Environment, FileSystemLoader
 
-import matplotlib as mpl
-mpl.use('Agg')
-
-import matplotlib.pyplot as plt
 
 class Otter():
     """Otter is a pythonic report writing system designed to produce HTML
@@ -77,30 +73,6 @@ class Otter():
             self._mkdir_recursive(sub_path)
         if not os.path.exists(path):
             os.mkdir(path)
-    
-    def write_image(self, url):
-        html_str= """
-        <div class="row">
-          <img src="{}" style="max-width: 100%;" class="img-responsive"></img>
-        </div>
-        """.format(url)
-        self._write(html_str)
-        
-    def write_warning(self, warning, text):
-        html_str = """
-        <div class="row">
-        <div class="alert alert-{}" role="alert">{}</div>
-        </div>
-        """.format(warning,text)
-        self._write(html_str)
 
-    def write_plot(self, figure=None, filename=None):
-        if filename==None:
-            filename = "{}.png".format(uuid.uuid4().hex)
-	if figure:
-        	figure.savefig(self.reportfolder+"/"+filename, dpi=300)
-	else:
-		plt.savefig(self.reportfolder+"/"+filename, dpi=300)
-        self.write_image(self.foldername+filename)
 
 

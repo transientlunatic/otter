@@ -6,6 +6,14 @@ Implements a means of using the Bootstrap html and css toolkit to make the repor
 from itertools import cycle
 import markdown
 
+class GenDiv():
+    def __iadd__(self, item):
+        self.__add__(item)
+        return self.content
+        
+    def __add__(self, item):
+        self.content += markdown.markdown(str(item), output_format='xhtml5')
+
 class Row():
     def __init__(self, cols=1, size='md', hclass=''):
         """
@@ -81,8 +89,28 @@ class Column():
         output += self.colclose
         return output
 
+class Alert(GenDiv):
+    """
+    Creates a Bootstrap alert object in the report.
+    """
+    def __init__(self, text='',style='info',  hclass=''):
+        self.alertopen = "<div class='alert alert-{}' role='alert'>".format(style)
+        self.alertclose = "</div>"
+        self.content = text
+
+    def __repr__(self):
+        output = ''
+        output += self.alertopen
+        output += self.content
+        output += self.alertclose
+        return output
+        
+        
 
 class Panel():
+    """
+    Creates a Bootstrap panel object in the report.
+    """
     def __init__(self, title='', footer = '', style='default', hclass=''):
         self.title = title
         self.footer = footer
