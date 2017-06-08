@@ -33,6 +33,8 @@ sys.path.insert(0, project_root)
 
 import otter
 
+import sphinx_bootstrap_theme
+
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -120,9 +122,8 @@ pygments_style = 'sphinx'
 #html_theme = 'default'
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+    html_theme = 'bootstrap'
+    html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 else:
     #sys.path.insert(0, os.path.abspath('../../'))
@@ -169,6 +170,9 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
+
+html_sidebars = {'**': ['localtoc.html', 'sourcelink.html', 'searchbox.html']}
+
 
 # Additional templates that should be rendered to pages, maps page names
 # to template names.
