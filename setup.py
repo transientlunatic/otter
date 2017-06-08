@@ -14,7 +14,8 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
 requirements = [
-    # TODO: put package requirements here
+    'jinja2',
+    'markdown',
     'matplotlib'
 ]
 
@@ -33,6 +34,8 @@ setup(
     packages=[
         'otter',
     ],
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
     package_dir={'otter':
                  'otter'},
     include_package_data=True,

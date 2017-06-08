@@ -7,13 +7,15 @@ import ConfigParser
 
 from jinja2 import Template, Environment, FileSystemLoader
 
+from pkg_resources import resource_string, resource_stream, resource_filename
+default_config = resource_stream(__name__, 'otter.conf')
 
 class Otter():
     """Otter is a pythonic report writing system designed to produce HTML
     reports for long-running or complex jobs where and iPython
     notebook would be an impractical way of presenting information.
     """
-    def __init__(self, filename, theme, **kwargs):
+    def __init__(self, filename, config_file=None, **kwargs):
         """
         An Otter report is created by this class.
 
@@ -21,8 +23,8 @@ class Otter():
         ----------
         filename : str
            The path to the location of the report, for example `/home/me/www/report.html`.
-        meta : dict
-           A dictionary of metadata. This is likely to change very soon, but at present a dictionary is required for the title, subtitle, and author's name of the report.
+        config_file: str
+           The location of the config file which should be used to generate the report.
         """
 
         # Attempt to load in default meta data from a config file
@@ -30,11 +32,26 @@ class Otter():
         # extend to look in home directory and environment variable location too
 
         config = ConfigParser.ConfigParser()
-        config.read('otter.cfg')
+        #if not config_file:
+        config.readfp(default_config)
+        if config_file:
+            config.read(config_file)
         self.meta = {}
+        
         for option in config.options('meta'):
             self.meta[option] = config.get('meta', option)
-        
+        for option in kwargs.items():
+            self.meta[option[0]] = option[1]
+            
+        try:
+            theme = config.get("theme", "location")
+        except:
+            print("Cannot find theme in the config file. Using the default theme.")
+            try:
+                theme = resource_filename(__name__, "themes/default/")
+            except:
+                print("No theme files found.")
+            
         self.env = Environment(loader=FileSystemLoader(theme))
         
         self.reportfolder = filename+"_files"
@@ -50,7 +67,7 @@ class Otter():
         
     def add(self, item):
         self.items.append(item)
-        return item
+        return self
 
     def show(self):
         html = ''
