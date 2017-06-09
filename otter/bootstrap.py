@@ -20,6 +20,7 @@ class HTMLElement():
         else:
             self.content.append(item)
 
+            
 class Row(HTMLElement):
     def __init__(self, cols=1, size='md', hclass=''):
         """
@@ -115,6 +116,21 @@ class Alert(HTMLElement):
     def __str__(self):
         return self.__repr__
 
+
+class Label(HTMLElement):
+    def __init__(self, text="", style="default"):
+        """
+        Make a new label element.
+        """
+        self.opening = "<span class='label label-{}'>".format(style)
+        self.closing = "</span>"
+        self.content = content
+    def __repr__(self):
+        output = ''
+        return output.join(self.opening, self.content, self.closing)
+    def __str__(self):
+        return self.__repr__
+    
 class Panel(HTMLElement):
     """
     Creates a Bootstrap panel object in the report.
