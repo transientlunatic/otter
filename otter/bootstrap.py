@@ -160,6 +160,7 @@ class Panel(HTMLElement):
                 contents += str(content)
         output += self.panbody.format(contents)
         if self.footer != '': output += self.panfooter.format(self.footer)
+        output += self.panclose
         return output
 
     __str__ = __repr__
