@@ -148,7 +148,7 @@ class Panel(HTMLElement):
         self.panheader = "<div class='panel-heading'>{}</div>"
         self.panfooter = "<div class='panel-footer'>{}</div>"
         
-        self.content = ''
+        self.content = []
 
 
     def __repr__(self):
