@@ -16,6 +16,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'jinja2',
     'markdown',
+    'pyyaml',
     'matplotlib'
 ]
 
@@ -36,8 +37,9 @@ setup(
     ],
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
-    package_dir={'otter':
-                 'otter'},
+    package_dir={
+        'otter': 'otter'
+    },
     include_package_data=True,
     install_requires=requirements,
     license="ISCL",
