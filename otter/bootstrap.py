@@ -127,7 +127,7 @@ class Label(HTMLElement):
         self.content = text
     def __repr__(self):
         output = ''
-        return output.join(self.opening, self.content, self.closing)
+        return self.opening + self.content + self.closing
     def __str__(self):
         return self.__repr__()
     
