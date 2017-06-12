@@ -124,7 +124,7 @@ class Label(HTMLElement):
         """
         self.opening = "<span class='label label-{}'>".format(style)
         self.closing = "</span>"
-        self.content = content
+        self.content = text
     def __repr__(self):
         output = ''
         return output.join(self.opening, self.content, self.closing)
