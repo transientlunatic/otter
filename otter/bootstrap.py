@@ -114,7 +114,7 @@ class Alert(HTMLElement):
         return output
         
     def __str__(self):
-        return self.__repr__
+        return self.__repr__()
 
 
 class Label(HTMLElement):
@@ -129,7 +129,7 @@ class Label(HTMLElement):
         output = ''
         return output.join(self.opening, self.content, self.closing)
     def __str__(self):
-        return self.__repr__
+        return self.__repr__()
     
 class Panel(HTMLElement):
     """
