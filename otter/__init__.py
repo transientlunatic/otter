@@ -2,6 +2,10 @@
 
 __author__ = 'Daniel Williams'
 __email__ = 'd.williams.2@research.gla.ac.uk'
-__version__ = '0.0.1'
+
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
+
 
 from otter import *

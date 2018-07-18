@@ -33,6 +33,8 @@ sys.path.insert(0, project_root)
 
 import otter
 
+import sphinx_bootstrap_theme
+
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -56,14 +58,15 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Otter'
-copyright = u'2015, Daniel Williams'
+copyright = u'2018, Daniel Williams'
+author = u"Daniel Williams"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
 # the built documents.
 #
 # The short X.Y version.
-version = otter.__version__
+version = ".".join(otter.__version__.split('.')[:2])
 # The full version, including alpha/beta/rc tags.
 release = otter.__version__
 
@@ -120,9 +123,14 @@ pygments_style = 'sphinx'
 #html_theme = 'default'
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+    html_theme = 'bootstrap'
+    html_theme_options = {
+        "bootstrap_version": 3,
+        'navbar_fixed_top': "false",
+    }
+    templates_path = ['_templates']
+    html_static_path = ["_static"]
+    html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 else:
     #sys.path.insert(0, os.path.abspath('../../'))
@@ -169,6 +177,9 @@ html_static_path = ['_static']
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
+
+html_sidebars = {'**': ['localtoc.html', 'sourcelink.html', 'searchbox.html']}
+
 
 # Additional templates that should be rendered to pages, maps page names
 # to template names.
@@ -273,7 +284,7 @@ texinfo_documents = [
      u'Otter Documentation',
      u'Daniel WIlliams',
      'otter',
-     'One line description of project.',
+     'Otter is a report generation tool for Python.',
      'Miscellaneous'),
 ]
 

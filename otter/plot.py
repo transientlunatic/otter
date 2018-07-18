@@ -5,19 +5,21 @@ Implements an interface with the Matplotlib plotting library in order to add plo
 import uuid
 import matplotlib
 matplotlib.use('Agg')
+import base64
+from cStringIO import StringIO
 
 import matplotlib.pyplot as plt
 
 class Figure():
-    def __init__(self, report, figure=None, filename=None, dpi=300):
+    def __init__(self, figure, filename=None, dpi=300):
+
+        self.image = StringIO()
+
         if filename==None:
-            filename = "{}.png".format(uuid.uuid4().hex)
-	if figure:
-        	figure.savefig(report.reportfolder+"/"+filename, dpi=dpi)
-	else:
-		plt.savefig(self.reportfolder+"/"+filename, dpi=dpi)
-        self.url = report.foldername+filename
+            figure.savefig(self.image, dpi=dpi)
+
+        self.bitstring = base64.encodestring(self.image.getvalue())
     
     def __repr__(self):
-        html_str= """<img src="{}" style="max-width: 100%;" class="img-responsive"></img>""".format(self.url)
+        html_str= """<img src="data:image/png;base64,{}" style="max-width: 100%;" class="img-responsive"/>""".format(self.bitstring)
         return html_str

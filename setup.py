@@ -14,7 +14,10 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
 requirements = [
-    # TODO: put package requirements here
+    'tabulate',
+    'jinja2',
+    'markdown',
+    'pyyaml',
     'matplotlib'
 ]
 
@@ -24,7 +27,6 @@ test_requirements = [
 
 setup(
     name='otter-report',
-    version='0.1.0',
     description="The simple HTML report generator for Python jobs.",
     long_description=readme + '\n\n' + history,
     author="Daniel Williams",
@@ -33,8 +35,11 @@ setup(
     packages=[
         'otter',
     ],
-    package_dir={'otter':
-                 'otter'},
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
+    package_dir={
+        'otter': 'otter'
+    },
     include_package_data=True,
     install_requires=requirements,
     license="ISCL",

@@ -2,19 +2,14 @@
 Implements a means of using the Bootstrap html and css toolkit to make the report.
 """
 
-
+from otter import HTMLElement
 from itertools import cycle
 import markdown
+import tabulate
 
-class GenDiv():
-    def __iadd__(self, item):
-        self.__add__(item)
-        return self.content
-        
-    def __add__(self, item):
-        self.content += markdown.markdown(str(item), output_format='xhtml5')
-
-class Row():
+from .html import *
+            
+class Row(HTMLElement):
     def __init__(self, cols=1, size='md', hclass=''):
         """
         Add a new row to the grid.
@@ -66,30 +61,31 @@ class Row():
         output += self.rowclose
         return output
 
-class Column():
-    def __init__(self, width, size, hclass):
+    
+    def __str__(self):
+        return self.__repr__()
+
+class Column(HTMLElement):
+    def __init__(self, width=12, size="md", hclass=""):
         self.width = width
         self.size = size
         self.hclass = hclass
         self.colopen = "<div class='col-{size}-{width} {hclass}'>"
         self.colclose = "</div>"
-        self.content = ''
-
-    def __iadd__(self, item):
-        self.__add__(item)
-        return self.content
-        
-    def __add__(self, item):
-        self.content += markdown.markdown(str(item), output_format='xhtml5')
+        self.content = []
 
     def __repr__(self):
         output = ''
         output += self.colopen.format(size=self.size, width=self.width, hclass=self.hclass)
-        output += self.content
+        for content in self.content:
+                output += str(content)
         output += self.colclose
         return output
+    
+    def __str__(self):
+        return self.__repr__()
 
-class Alert(GenDiv):
+class Alert(HTMLElement):
     """
     Creates a Bootstrap alert object in the report.
     """
@@ -105,9 +101,25 @@ class Alert(GenDiv):
         output += self.alertclose
         return output
         
-        
+    def __str__(self):
+        return self.__repr__()
 
-class Panel():
+
+class Label(HTMLElement):
+    def __init__(self, text="", style="default"):
+        """
+        Make a new label element.
+        """
+        self.opening = "<span class='label label-{}'>".format(style)
+        self.closing = "</span>"
+        self.content = text
+    def __repr__(self):
+        output = ''
+        return self.opening + self.content + self.closing
+    def __str__(self):
+        return self.__repr__()
+    
+class Panel(HTMLElement):
     """
     Creates a Bootstrap panel object in the report.
     """
@@ -124,21 +136,19 @@ class Panel():
         self.panheader = "<div class='panel-heading'>{}</div>"
         self.panfooter = "<div class='panel-footer'>{}</div>"
         
-        self.content = ''
+        self.content = []
 
-    def __iadd__(self, item):
-        self.__add__(item)
-        return self.content
-        
-    def __add__(self, item):
-        self.content += markdown.markdown(item, output_format='xhtml5')
 
     def __repr__(self):
         output = ''
         output += self.panopen.format(style=self.style, hclass=self.hclass)
         if self.panheader != '': output += self.panheader.format(self.title)
-        output += self.panbody.format(self.content)
+        contents = ""
+        for content in self.content:
+                contents += str(content)
+        output += self.panbody.format(contents)
         if self.footer != '': output += self.panfooter.format(self.footer)
+        output += self.panclose
         return output
 
     __str__ = __repr__

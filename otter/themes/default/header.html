@@ -1,0 +1,22 @@
+
+<div class="col-md-12">
+  <div class="container">
+    <div class="row">
+      <div class="page-header">
+        <h1>{{ meta.title }} <small>{{ meta.subtitle }}</small></h1>
+	{% if meta.author_email %}
+	<a href='mailto:{{ meta.author_email }}'>
+	  {% endif %}
+          <p><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ meta.author }}</p>
+	  {% if meta.author_email %}
+	</a>
+	{% endif %}
+      </div>
+      {% if meta.breadcrumbs %}
+      <ol class="breadcrumb">
+        {% for crumb in meta.breadcrumbs %}
+        <li><a href="{{ crumb[0] }}">{{ crumb[1] }}</a></li>
+        {% endfor %}
+      </ol>
+      {% endif %}
+    </div>
