@@ -2,24 +2,12 @@
 Implements a means of using the Bootstrap html and css toolkit to make the report.
 """
 
-
+from otter import HTMLElement
 from itertools import cycle
 import markdown
+import tabulate
 
-class HTMLElement():
-    def __init__(self, content=""):
-        self.content = content
-    
-    def __iadd__(self, item):
-        self.__add__(item)
-        return self.content
-        
-    def __add__(self, item):
-        if isinstance(item, str):
-            self.content.append(markdown.markdown(str(item), output_format='xhtml5'))
-        else:
-            self.content.append(item)
-
+from .html import *
             
 class Row(HTMLElement):
     def __init__(self, cols=1, size='md', hclass=''):
