@@ -2,16 +2,6 @@
 Otter
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/otter-report.svg
-        :target: https://pypi.python.org/pypi/otter-report
-
-.. image:: https://img.shields.io/travis/transientlunatic/otter.svg
-        :target: https://travis-ci.org/transientlunatic/otter
-
-.. image:: https://readthedocs.org/projects/otter/badge/?version=latest
-        :target: https://readthedocs.org/projects/otter/?badge=latest
-        :alt: Documentation Status
-
 
 Otter is a simple HTML report generator for Python jobs. Otter was
 designed to produce reports on long-running jobs on remote machines,
@@ -21,7 +11,7 @@ outputs from Python scripts, and convert them into neat and readible HTML pages.
 Otter makes use of Twitter Bootstrap to make an easily themed layout for its output.
 
 * Free software: ISC license
-* Documentation: https://otter.readthedocs.org.
+* Documentation: https://code.daniel-williams.co.uk/otter/
 
 Features
 --------
