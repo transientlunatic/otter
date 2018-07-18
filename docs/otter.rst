@@ -12,6 +12,14 @@ otter.bootstrap module
     :undoc-members:
     :show-inheritance:
 
+otter.html module
+-----------------
+
+.. automodule:: otter.html
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 otter.otter module
 ------------------
 

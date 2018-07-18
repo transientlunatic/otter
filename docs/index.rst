@@ -13,7 +13,8 @@ but it's capable of handling a wide range of data outputs.
 
 Otter is also highly customisable, and you can use the ``liquid`` templating language to produce new output templates.
 
-Contents:
+Contents
+========
 
 .. toctree::
    :maxdepth: 2

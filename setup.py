@@ -14,6 +14,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
 requirements = [
+    'tabulate',
     'jinja2',
     'markdown',
     'pyyaml',
@@ -26,7 +27,6 @@ test_requirements = [
 
 setup(
     name='otter-report',
-    version='0.1.0',
     description="The simple HTML report generator for Python jobs.",
     long_description=readme + '\n\n' + history,
     author="Daniel Williams",

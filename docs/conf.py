@@ -58,14 +58,15 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Otter'
-copyright = u'2015, Daniel Williams'
+copyright = u'2018, Daniel Williams'
+author = u"Daniel Williams"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
 # the built documents.
 #
 # The short X.Y version.
-version = otter.__version__
+version = ".".join(otter.__version__.split('.')[:2])
 # The full version, including alpha/beta/rc tags.
 release = otter.__version__
 
@@ -123,6 +124,12 @@ pygments_style = 'sphinx'
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if not on_rtd:  # only import and set the theme if we're building docs locally
     html_theme = 'bootstrap'
+    html_theme_options = {
+        "bootstrap_version": 3,
+        'navbar_fixed_top': "false",
+    }
+    templates_path = ['_templates']
+    html_static_path = ["_static"]
     html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 else:
@@ -277,7 +284,7 @@ texinfo_documents = [
      u'Otter Documentation',
      u'Daniel WIlliams',
      'otter',
-     'One line description of project.',
+     'Otter is a report generation tool for Python.',
      'Miscellaneous'),
 ]
 
