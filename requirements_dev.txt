@@ -1,3 +1,4 @@
+-e git+https://github.com/transientlunatic/sphinx-daniel-theme.git#egg=sphinx-daniel-theme
 bumpversion==0.5.3
 wheel==0.23.0
 watchdog==0.8.3
