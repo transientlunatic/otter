@@ -11,3 +11,4 @@ recursive-exclude * *.py[co]
 recursive-include docs *.rst conf.py Makefile make.bat
 include versioneer.py
 include otter/_version.py
+include otter/otter.conf

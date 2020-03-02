@@ -16,3 +16,11 @@ History
 * New API for adding material to reports
 * Full support for matplotlib plots
 * Support for multiple data types in reports
+
+0.3.0 (2020-03-02)
+------------------
+
+"Beinn an Dothaidh"
+
+* Improved Python 3 support.
+* Removed Python 2 support.

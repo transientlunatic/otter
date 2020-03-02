@@ -18,7 +18,8 @@ requirements = [
     'jinja2',
     'markdown',
     'pyyaml',
-    'matplotlib'
+    'matplotlib',
+    'configparser'
 ]
 
 test_requirements = [
@@ -30,7 +31,7 @@ setup(
     description="The simple HTML report generator for Python jobs.",
     long_description=readme + '\n\n' + history,
     author="Daniel Williams",
-    author_email='d.williams.2@research.gla.ac.uk',
+    author_email='daniel.williams@gla.ac.uk',
     url='https://github.com/transientlunatic/otter',
     packages=[
         'otter',
@@ -42,6 +43,7 @@ setup(
     },
     include_package_data=True,
     install_requires=requirements,
+    python_requires= ">=3.3",
     license="ISCL",
     zip_safe=False,
     keywords='otter',
@@ -50,12 +52,13 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: ISC License (ISCL)',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     test_suite='tests',
     tests_require=test_requirements

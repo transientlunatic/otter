@@ -2,7 +2,7 @@
 Implements a means of using the Bootstrap html and css toolkit to make the report.
 """
 
-from otter import HTMLElement
+from .html import HTMLElement
 from itertools import cycle
 import markdown
 import tabulate
@@ -85,6 +85,12 @@ class Column(HTMLElement):
     def __str__(self):
         return self.__repr__()
 
+# class Collapse(HTMLElement):
+#     """
+#     Creates a bootstrap collapsable div.
+#     """
+#     def __init__(self, text
+    
 class Alert(HTMLElement):
     """
     Creates a Bootstrap alert object in the report.

@@ -3,12 +3,12 @@
 #import uuid
 import os
 from .html import *
-import ConfigParser
+from configparser import ConfigParser
 
 from jinja2 import Template, Environment, FileSystemLoader
 
 from pkg_resources import resource_string, resource_stream, resource_filename
-default_config = resource_stream(__name__, 'otter.conf')
+default_config = resource_string(__name__, 'otter.conf')
 
 
 
@@ -34,17 +34,21 @@ class Otter():
         # At the moment just the current directory, but should
         # extend to look in home directory and environment variable location too
 
-        config = ConfigParser.ConfigParser()
+        config = ConfigParser()
         #if not config_file:
-        config.readfp(default_config)
+        try:
+            config.read(default_config)
+        except TypeError: # Looks like Python 3
+            config.readfp(default_config.decode("utf-8"))
         if config_file:
-            config.read(config_file)
+            config.read_string(config_file)
         self.meta = {}
-        
-        for option in config.options('meta'):
-            self.meta[option] = config.get('meta', option)
-        for option in kwargs.items():
-            self.meta[option[0]] = option[1]
+
+        if config.has_section("meta"):
+            for option in config['meta']:
+                self.meta[option] = config.get('meta', option)
+            for option in kwargs.items():
+                self.meta[option[0]] = option[1]
             
         try:
             theme = config.get("theme", "location")
