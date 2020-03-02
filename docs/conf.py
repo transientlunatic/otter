@@ -33,7 +33,7 @@ sys.path.insert(0, project_root)
 
 import otter
 
-import sphinx_bootstrap_theme
+import sphinx_daniel_theme
 
 # -- General configuration ---------------------------------------------
 
@@ -123,14 +123,14 @@ pygments_style = 'sphinx'
 #html_theme = 'default'
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if not on_rtd:  # only import and set the theme if we're building docs locally
-    html_theme = 'bootstrap'
+    html_theme = 'daniel'
     html_theme_options = {
         "bootstrap_version": 3,
         'navbar_fixed_top': "false",
     }
     templates_path = ['_templates']
     html_static_path = ["_static"]
-    html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+    html_theme_path = sphinx_daniel_theme.get_html_theme_path()
 
 else:
     #sys.path.insert(0, os.path.abspath('../../'))
