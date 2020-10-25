@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Daniel Williams'
-__email__ = 'd.williams.2@research.gla.ac.uk'
+__email__ = 'daniel.williams@glasgow.ac.uk'
 
 from ._version import get_versions
 __version__ = get_versions()['version']

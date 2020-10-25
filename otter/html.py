@@ -24,7 +24,7 @@ class HTMLElement(object):
         attributes = ""
         for attr, val in self.meta.items():
             if attr=="cl": attr="class"
-            attributes += " {}={}".format(attr, val)
+            attributes += """{}='{}'""".format(attr, val)
         if self.tag: output += "<{} {}>".format(self.tag, attributes)
         for item in self.content:
             if self.childtag:
@@ -79,7 +79,7 @@ class Row(HTMLElement):
                 self.content.append(item)
 
 def dict_to_table(dictionary):
-    table = Table(cl="table")
+    table = Table(cl="table table-sm table-striped table-bordered")
     for key, val in dictionary.items():
         table + Row([key, val])
     return table
@@ -106,7 +106,7 @@ def my_html_row_with_attrs(celltag, cell_values, colwidths, colaligns):
             "".join(values_with_attrs).rstrip() + \
             "</tr>"
 MyHTMLFormat = tabulate.TableFormat(
-        lineabove=tabulate.Line("<table class=\"table\">", "", "", ""),
+        lineabove=tabulate.Line("<table class=\"table table-sm\">", "", "", ""),
         linebelowheader=None,
         linebetweenrows=None,
         linebelow=tabulate.Line("</table>", "", "", ""),

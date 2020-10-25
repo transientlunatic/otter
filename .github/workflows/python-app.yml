@@ -1,0 +1,55 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Build
+      run: |
+        python -m pip install --upgrade pip
+        pip install wheel
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        python setup.py bdist_wheel
+        cd dist
+        echo '::set-env name=WHEEL::$(ls *.whl)'
+
+    - name: pypi-publish
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      uses: pypa/gh-action-pypi-publish@v1.3.1
+      with:
+        password: ${{ secrets.pypitoken }}
+
+        
+    - name: Build HTML Docs
+      run: |
+        pip install sphinx
+        pip install kentigern
+        pip install -r requirements.txt
+        pip install -r dev-requirements.txt
+        pip install .
+        cd docs
+        make html
+    - name: SCP Deploy HTML Docs
+      uses: horochx/deploy-via-scp@v1.0.1
+      with:
+        local: docs/_build/html/
+        remote: /home/danwilliams/code.daniel-williams.co.uk/rugby
+        host: ${{ secrets.sshhost }}
+        user: ${{ secrets.sshuser }}
+        key: ${{ secrets.sshkey }}

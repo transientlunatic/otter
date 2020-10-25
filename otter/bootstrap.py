@@ -65,6 +65,24 @@ class Row(HTMLElement):
     def __str__(self):
         return self.__repr__()
 
+class Container(HTMLElement):
+    def __init__(self, cl="container"):
+        self.colopen = f"<div class='{cl}'>"
+        self.colclose = "</div>"
+        self.content = []
+
+    def __repr__(self):
+        output = ''
+        output += self.colopen
+        for content in self.content:
+                output += str(content)
+        output += self.colclose
+        return output
+    
+    def __str__(self):
+        return self.__repr__()
+
+    
 class Column(HTMLElement):
     def __init__(self, width=12, size="md", hclass=""):
         self.width = width
@@ -111,12 +129,83 @@ class Alert(HTMLElement):
         return self.__repr__()
 
 
+class Navbar(HTMLElement):
+
+    def __init__(self, brand="", background="navbar-light bg-light"):
+        self.html = [f"""<nav class="navbar {background}"><a class="navbar-brand" href="#">{brand}</a>"""]
+        self.content = ["""<div class="navbar"><ul class="navbar-nav">"""]
+        self.close = ["</ul></div>"] + ["</nav>"]
+        
+    def __repr__(self):
+        return "".join(self.html + self.content + self.close)
+
+    def add_link(self, name="link", href="#"):
+        self.content.append(
+            f"""
+            <li class="nav-item">
+            <a class="nav-link" href="{href}">{name}</a>
+            </li>
+            """
+            )
+
+class Card(HTMLElement):
+
+    def __init__(self, title=None, footer=None):
+        self.opening = """<div class="card">"""
+
+        if title:
+            self.opening += f"""<div class="card-header">{title}</div>"""
+        
+        self.closing = """</div>"""
+
+        if footer:
+            self.closing = f"""<div class="card-footer">{footer}</div>""" + self.closing
+        
+        self.content = []
+
+    def __repr__(self):
+        inner = "".join([str(content) for content in self.content])
+        return self.opening + inner  + self.closing
+
+    def add_content(self, content):
+        self.content.append(content)
+
+class CardDeck(HTMLElement):
+
+    def __init__(self):
+        self.opening = """<div class="card-deck">"""
+        self.closing = """</div>"""
+        self.content = []
+
+    def add_card(self, card):
+        self.content.append(card)
+
+    def __repr__(self):
+        inner = "".join([str(content) for content in self.content])
+        return self.opening + inner  + self.closing
+
+class ListGroup(HTMLElement):
+    def __init__(self, classes="list-group-flush"):
+        self.opening = f"""<ul class="list-group {classes}">"""
+        self.closing = """</ul>"""
+        self.content = []
+
+    def add_item(self, text, context=""):
+        self.content.append(f"""<li class="list-group-item list-group-item-{context} d-flex justify-content-between align-items-center">{text}</li>""")
+
+    def __str__(self):
+        inner = "".join([str(content) for content in self.content])
+        return self.opening + inner + self.closing
+        
+    def __repr__(self):
+        return self.opening + "".join(self.content) + self.closing
+
 class Label(HTMLElement):
-    def __init__(self, text="", style="default"):
+    def __init__(self, text="", style="secondary"):
         """
         Make a new label element.
         """
-        self.opening = "<span class='label label-{}'>".format(style)
+        self.opening = "<span class='badge badge-{}'>".format(style)
         self.closing = "</span>"
         self.content = text
     def __repr__(self):
@@ -124,6 +213,8 @@ class Label(HTMLElement):
         return self.opening + self.content + self.closing
     def __str__(self):
         return self.__repr__()
+
+Badge = Label
     
 class Panel(HTMLElement):
     """

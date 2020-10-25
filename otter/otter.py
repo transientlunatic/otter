@@ -41,7 +41,8 @@ class Otter():
         except TypeError: # Looks like Python 3
             config.readfp(default_config.decode("utf-8"))
         if config_file:
-            config.read_string(config_file)
+            with open(config_file) as cf:
+                config.read_string(cf.read())
         self.meta = {}
 
         if config.has_section("meta"):
@@ -58,7 +59,7 @@ class Otter():
                 theme = resource_filename(__name__, "themes/default/")
             except:
                 print("No theme files found.")
-            
+
         self.env = Environment(loader=FileSystemLoader(theme))
         
         self.reportfolder = filename+"_files"
