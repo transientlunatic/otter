@@ -31,7 +31,7 @@ setup(
     description="The simple HTML report generator for Python jobs.",
     long_description=readme + '\n\n' + history,
     author="Daniel Williams",
-    author_email='daniel.williams@gla.ac.uk',
+    author_email='daniel.williams@glasgow.ac.uk',
     url='https://github.com/transientlunatic/otter',
     packages=[
         'otter',

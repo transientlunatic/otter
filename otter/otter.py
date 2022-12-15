@@ -18,7 +18,7 @@ class Otter():
     reports for long-running or complex jobs where and iPython
     notebook would be an impractical way of presenting information.
     """
-    def __init__(self, filename, config_file=None, **kwargs):
+    def __init__(self, filename, theme_location=None, config_file=None, **kwargs):
         """
         An Otter report is created by this class.
 
@@ -50,15 +50,25 @@ class Otter():
                 self.meta[option] = config.get('meta', option)
             for option in kwargs.items():
                 self.meta[option[0]] = option[1]
-            
-        try:
-            theme = config.get("theme", "location")
-        except:
-            print("Cannot find theme in the config file. Using the default theme.")
+
+        if theme_location:
+            theme = theme_location
+                
+        elif config.has_option("theme", "name"):
             try:
-                theme = resource_filename(__name__, "themes/default/")
+                import importlib
+                theme = importlib.import_module(config.get("theme", "name"))
             except:
-                print("No theme files found.")
+                pass
+        else:
+            try:
+                theme = config.get("theme", "location")
+            except:
+                print("Cannot find theme in the config file. Using the default theme.")
+                try:
+                    theme = resource_filename(__name__, "themes/default/")
+                except:
+                    print("No theme files found.")
 
         self.env = Environment(loader=FileSystemLoader(theme))
         

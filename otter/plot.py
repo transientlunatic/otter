@@ -19,7 +19,7 @@ class Figure():
         if filename==None:
             figure.savefig(self.image, dpi=dpi)
                 
-        self.bitstring = base64.encodestring(self.image.getvalue())
+        self.bitstring = base64.encodebytes(self.image.getvalue())
     
     def __repr__(self):
         html_str= r"""<img src="data:image/png;base64,{}" style="max-width: 100%;" class="img-responsive"/>""".format(self.bitstring.decode("utf-8"))
