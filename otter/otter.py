@@ -33,7 +33,6 @@ class Otter():
         # Attempt to load in default meta data from a config file
         # At the moment just the current directory, but should
         # extend to look in home directory and environment variable location too
-
         config = ConfigParser()
         #if not config_file:
         try:
@@ -53,7 +52,7 @@ class Otter():
 
         if theme_location:
             theme = theme_location
-                
+
         elif config.has_option("theme", "name"):
             try:
                 import importlib
