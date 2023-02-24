@@ -28,6 +28,7 @@ test_requirements = [
 
 setup(
     name='otter-report',
+    use_scm_version={"local_scheme": "no-local-version"},
     description="The simple HTML report generator for Python jobs.",
     long_description=readme + '\n\n' + history,
     author="Daniel Williams",
