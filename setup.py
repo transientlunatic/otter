@@ -37,7 +37,6 @@ setup(
     packages=[
         'otter',
     ],
-    use_scm_version=True,
     setup_requires=['setuptools_scm'],
     package_dir={
         'otter': 'otter'
