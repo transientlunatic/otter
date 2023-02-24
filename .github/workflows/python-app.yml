@@ -40,7 +40,7 @@ jobs:
         pip install sphinx
         pip install kentigern
         pip install -r requirements.txt
-        pip install -r dev-requirements.txt
+        pip install -r requirements_dev.txt
         pip install .
         cd docs
         make multi
