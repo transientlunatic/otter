@@ -44,12 +44,12 @@ jobs:
         pip install -r dev-requirements.txt
         pip install .
         cd docs
-        make html
+        make multi
     - name: SCP Deploy HTML Docs
       uses: horochx/deploy-via-scp@v1.0.1
       with:
         local: docs/_build/html/
-        remote: /home/danwilliams/code.daniel-williams.co.uk/rugby
+        remote: /home/danwilliams/code.daniel-williams.co.uk/otter
         host: ${{ secrets.sshhost }}
         user: ${{ secrets.sshuser }}
         key: ${{ secrets.sshkey }}
