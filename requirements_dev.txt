@@ -10,3 +10,5 @@ cryptography==3.3.2
 tabulate==0.8.2
 configparser
 PyYAML==5.1
+jinja2>=3.1.4 # not directly required, pinned by Snyk to avoid a vulnerability
+pygments>=2.15.0 # not directly required, pinned by Snyk to avoid a vulnerability
