@@ -6,7 +6,7 @@ flake8==2.4.1
 tox==2.1.1
 coverage==4.0
 Sphinx==1.3.1
-cryptography==3.3.2
+cryptography==42.0.4
 tabulate==0.8.2
 configparser
-PyYAML==5.1
+PyYAML==5.4
