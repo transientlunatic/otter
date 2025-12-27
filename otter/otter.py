@@ -38,11 +38,7 @@ class Otter():
         # At the moment just the current directory, but should
         # extend to look in home directory and environment variable location too
         config = ConfigParser()
-        #if not config_file:
-        try:
-            config.read(default_config)
-        except TypeError: # Looks like Python 3
-            config.readfp(default_config.decode("utf-8"))
+        config.read_string(default_config.decode('utf-8'))
         if config_file:
             with open(config_file) as cf:
                 config.read_string(cf.read())
@@ -54,24 +50,35 @@ class Otter():
             for option in kwargs.items():
                 self.meta[option[0]] = option[1]
 
+        # Initialize theme to None
+        theme = None
+        
         if theme_location:
             theme = theme_location
-
         elif config.has_option("theme", "name"):
             try:
                 import importlib
                 theme = importlib.import_module(config.get("theme", "name"))
             except:
-                pass
-        else:
-            try:
-                theme = config.get("theme", "location")
-            except:
-                print("Cannot find theme in the config file. Using the default theme.")
+                # If import fails, fall back to default theme
+                theme = None
+        
+        # If theme is still None, try to get location from config
+        if theme is None:
+            if config.has_option("theme", "location"):
                 try:
-                    theme = str(files(__package__).joinpath("themes/default"))
+                    theme = config.get("theme", "location")
                 except:
-                    print("No theme files found.")
+                    theme = None
+        
+        # If still no theme, use default
+        if theme is None:
+            print("Cannot find theme in the config file. Using the default theme.")
+            try:
+                theme = str(files(__package__).joinpath("themes/default"))
+            except:
+                print("No theme files found.")
+                raise
 
         self.env = Environment(loader=FileSystemLoader(theme))
         
