@@ -18,22 +18,18 @@ classifiers = [
     "License :: OSI Approved :: ISC License (ISCL)",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 dependencies = [
     "tabulate",
     "jinja2>=3.1.4",
     "markdown",
     "pyyaml>=6.0",
     "matplotlib",
-    "importlib_resources; python_version < '3.9'",
-    "importlib_metadata; python_version < '3.8'",
 ]
 
 [project.optional-dependencies]
