@@ -67,6 +67,7 @@ Contents
    installation
    usage
    formatting
+   multiversion
    contributing
    authors
    history
