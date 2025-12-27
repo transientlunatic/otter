@@ -50,30 +50,37 @@ class Otter():
             for option in kwargs.items():
                 self.meta[option[0]] = option[1]
 
-        # Initialize theme to None
         theme = None
-        
+
         if theme_location:
             theme = theme_location
         elif config.has_option("theme", "name"):
             try:
                 import importlib
-                theme = importlib.import_module(config.get("theme", "name"))
+                import os
+                theme_module = importlib.import_module(config.get("theme", "name"))
+                # Try to get the path from the module
+                if hasattr(theme_module, '__path__'):
+                    theme = theme_module.__path__[0]
+                elif hasattr(theme_module, '__file__'):
+                    theme = os.path.dirname(theme_module.__file__)
+                else:
+                    theme = None
             except (ImportError, ModuleNotFoundError):
-                # If import fails, fall back to default theme
+                # If import fails, try other theme resolution methods
                 theme = None
-        
+
         # If theme is still None, try to get location from config
         if theme is None and config.has_option("theme", "location"):
             theme = config.get("theme", "location")
-        
+
         # If still no theme, use default
         if theme is None:
             print("Cannot find theme in the config file. Using the default theme.")
             theme = str(files(__package__).joinpath("themes/default"))
 
         self.env = Environment(loader=FileSystemLoader(theme))
-        
+
         self.reportfolder = filename+"_files"
         self.foldername = os.path.basename(filename)+"_files/"
         if not os.path.exists(self.reportfolder):
