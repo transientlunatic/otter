@@ -2,13 +2,18 @@
 
 #import uuid
 import os
+import importlib
 from .html import *
 from configparser import ConfigParser
 
 from jinja2 import Template, Environment, FileSystemLoader
 
-from pkg_resources import resource_string, resource_stream, resource_filename
-default_config = resource_string(__name__, 'otter.conf')
+try:
+    from importlib.resources import files
+except ImportError:
+    # Fallback for Python < 3.9
+    from importlib_resources import files
+default_config = files(__package__).joinpath('otter.conf').read_bytes()
 
 
 
@@ -34,11 +39,7 @@ class Otter():
         # At the moment just the current directory, but should
         # extend to look in home directory and environment variable location too
         config = ConfigParser()
-        #if not config_file:
-        try:
-            config.read(default_config)
-        except TypeError: # Looks like Python 3
-            config.readfp(default_config.decode("utf-8"))
+        config.read_string(default_config.decode('utf-8'))
         if config_file:
             with open(config_file) as cf:
                 config.read_string(cf.read())
@@ -50,27 +51,35 @@ class Otter():
             for option in kwargs.items():
                 self.meta[option[0]] = option[1]
 
+        theme = None
+
         if theme_location:
             theme = theme_location
-
         elif config.has_option("theme", "name"):
             try:
-                import importlib
-                theme = importlib.import_module(config.get("theme", "name"))
-            except:
-                pass
-        else:
-            try:
-                theme = config.get("theme", "location")
-            except:
-                print("Cannot find theme in the config file. Using the default theme.")
-                try:
-                    theme = resource_filename(__name__, "themes/default/")
-                except:
-                    print("No theme files found.")
+                theme_module = importlib.import_module(config.get("theme", "name"))
+                # Try to get the path from the module
+                if hasattr(theme_module, '__path__') and len(theme_module.__path__) > 0:
+                    theme = theme_module.__path__[0]
+                elif hasattr(theme_module, '__file__'):
+                    theme = os.path.dirname(theme_module.__file__)
+                else:
+                    theme = None
+            except (ImportError, ModuleNotFoundError):
+                # If import fails, try other theme resolution methods
+                theme = None
+
+        # If theme is still None, try to get location from config
+        if theme is None and config.has_option("theme", "location"):
+            theme = config.get("theme", "location")
+
+        # If still no theme, use default
+        if theme is None:
+            print("Cannot find theme in the config file. Using the default theme.")
+            theme = str(files(__package__).joinpath("themes/default"))
 
         self.env = Environment(loader=FileSystemLoader(theme))
-        
+
         self.reportfolder = filename+"_files"
         self.foldername = os.path.basename(filename)+"_files/"
         if not os.path.exists(self.reportfolder):
