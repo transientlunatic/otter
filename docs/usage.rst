@@ -57,3 +57,24 @@ This will add a plot of a sinusoid to the report.
 Otter will automatically try and handle a number of other data formats automatically, and make them
 aesthetically pleasing. Dictionaries get turned into tables, for example, as do numpy arrays, while lists are turned into HTML lists.
 
+Pandas DataFrames
+^^^^^^^^^^^^^^^^^
+
+If you have pandas installed, Otter can also automatically render pandas DataFrames as HTML tables. For example: ::
+
+  import pandas as pd
+
+  df = pd.DataFrame({
+      'Name': ['Alice', 'Bob', 'Charlie'],
+      'Age': [25, 30, 35],
+      'City': ['New York', 'London', 'Paris']
+  })
+
+  with report:
+     report + "## Employee Data"
+     report + df
+
+The DataFrame will be automatically converted to a nicely formatted HTML table with proper headers and styling that matches the Bootstrap theme.
+
+Note: pandas is an optional dependency. Install it with ``pip install pandas`` or ``pip install otter-report[pandas]`` to enable DataFrame support.
+
