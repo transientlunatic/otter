@@ -2,6 +2,7 @@
 
 #import uuid
 import os
+import importlib
 from .html import *
 from configparser import ConfigParser
 
@@ -56,11 +57,9 @@ class Otter():
             theme = theme_location
         elif config.has_option("theme", "name"):
             try:
-                import importlib
-                import os
                 theme_module = importlib.import_module(config.get("theme", "name"))
                 # Try to get the path from the module
-                if hasattr(theme_module, '__path__'):
+                if hasattr(theme_module, '__path__') and theme_module.__path__:
                     theme = theme_module.__path__[0]
                 elif hasattr(theme_module, '__file__'):
                     theme = os.path.dirname(theme_module.__file__)
