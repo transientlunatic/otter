@@ -8,11 +8,7 @@ from configparser import ConfigParser
 
 from jinja2 import Template, Environment, FileSystemLoader
 
-try:
-    from importlib.resources import files
-except ImportError:
-    # Fallback for Python < 3.9
-    from importlib_resources import files
+from importlib.resources import files
 default_config = files(__package__).joinpath('otter.conf').read_bytes()
 
 

@@ -1,7 +1,72 @@
-[project]
-name = "Otter"
-
-
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "otter-report"
+dynamic = ["version"]
+description = "The simple HTML report generator for Python jobs."
+readme = "README.rst"
+license = {text = "ISC"}
+authors = [
+    {name = "Daniel Williams", email = "daniel.williams@glasgow.ac.uk"}
+]
+keywords = ["otter", "report", "html"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: ISC License (ISCL)",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "tabulate",
+    "jinja2>=3.1.4",
+    "markdown",
+    "pyyaml>=6.0",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+dev = [
+    "bumpversion>=0.6.0",
+    "wheel>=0.42",
+    "watchdog>=2.0",
+    "flake8>=6.0.0",
+    "tox>=3.28,<5",
+    "coverage>=6.5,<8",
+    "cryptography>=43.0.1",
+    "pygments>=2.15.0",
+]
+docs = [
+    "Sphinx>=4.0",
+    "numpydoc",
+    "sphinx-multiversion",
+    "kentigern",
+]
+
+[project.urls]
+Homepage = "https://github.com/transientlunatic/otter"
+Documentation = "https://code.daniel-williams.co.uk/otter/"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["otter*"]
+exclude = ["tests*", "docs*"]
+
+[tool.setuptools.package-data]
+otter = ["*.conf", "themes/**/*"]
+
+[tool.setuptools_scm]
+tag_regex = "^v(?P<version>.*)$"
+local_scheme = "no-local-version"
+version_file = "otter/_version.py"

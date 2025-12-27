@@ -41,7 +41,7 @@ import otter
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'numpydoc']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'numpydoc', 'sphinx_multiversion']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -172,7 +172,7 @@ html_static_path = ['_static']
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
 
-html_sidebars = {'**': ['localtoc.html', 'sourcelink.html', 'searchbox.html']}
+html_sidebars = {'**': ['versioning.html', 'localtoc.html', 'sourcelink.html', 'searchbox.html']}
 
 
 # Additional templates that should be rendered to pages, maps page names
@@ -293,3 +293,24 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+
+# -- Options for sphinx-multiversion -----------------------------------
+
+# Whitelist pattern for tags (only release tags)
+smv_tag_whitelist = r'^v\d+\.\d+.*$'
+
+# Whitelist pattern for branches (only main/master)
+smv_branch_whitelist = r'^(main|master)$'
+
+# Whitelist pattern for remotes (only origin)
+smv_remote_whitelist = r'^origin$'
+
+# Pattern for released versions
+smv_released_pattern = r'^refs/tags/v\d+\.\d+.*$'
+
+# Output directory for multiversion builds
+smv_outputdir_format = '{ref.name}'
+
+# Prefer the most recent version
+smv_prefer_remote_refs = False

@@ -1,0 +1,18 @@
+{% if versions %}
+<h3>{{ _('Versions') }}</h3>
+<ul>
+  {%- for item in versions %}
+  <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+  {%- endfor %}
+</ul>
+{% endif %}
+
+{# Alternative template for sphinx-multiversion using versioninfo context #}
+{% if versioninfo %}
+<h3>{{ _('Versions') }}</h3>
+<ul>
+  {%- for item in versioninfo %}
+  <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+  {%- endfor %}
+</ul>
+{% endif %}
