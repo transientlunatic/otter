@@ -7,8 +7,8 @@ from configparser import ConfigParser
 
 from jinja2 import Template, Environment, FileSystemLoader
 
-from pkg_resources import resource_string, resource_stream, resource_filename
-default_config = resource_string(__name__, 'otter.conf')
+from importlib.resources import files
+default_config = files(__package__).joinpath('otter.conf').read_bytes()
 
 
 
@@ -65,7 +65,7 @@ class Otter():
             except:
                 print("Cannot find theme in the config file. Using the default theme.")
                 try:
-                    theme = resource_filename(__name__, "themes/default/")
+                    theme = str(files(__package__).joinpath("themes/default"))
                 except:
                     print("No theme files found.")
 
