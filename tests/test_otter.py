@@ -156,6 +156,19 @@ class TestPandasSupport(unittest.TestCase):
         except ImportError:
             self.pandas_available = False
             self.pd = None
+        self.test_dir = tempfile.mkdtemp()
+        self.test_file = os.path.join(self.test_dir, "test_pandas.html")
+
+    def tearDown(self):
+        """Clean up test fixtures."""
+        if os.path.exists(self.test_dir):
+            try:
+                shutil.rmtree(self.test_dir)
+            except (OSError, PermissionError):
+                # On some platforms (e.g., Windows), files may not be released immediately.
+                import time
+                time.sleep(0.1)
+                shutil.rmtree(self.test_dir)
 
     def test_pandas_dataframe_handler(self):
         """Test that pandas DataFrames are converted to HTML tables."""
@@ -185,48 +198,33 @@ class TestPandasSupport(unittest.TestCase):
         if not self.pandas_available:
             self.skipTest("pandas is not installed")
         
-        # Create a test report
-        test_dir = tempfile.mkdtemp()
-        test_file = os.path.join(test_dir, "test_pandas.html")
+        report = otter.Otter(self.test_file, title="Pandas Test")
         
-        try:
-            report = otter.Otter(test_file, title="Pandas Test")
-            
-            # Create a simple DataFrame
-            df = self.pd.DataFrame({
-                'Name': ['Alice', 'Bob', 'Charlie'],
-                'Age': [25, 30, 35],
-                'City': ['New York', 'London', 'Paris']
-            })
-            
-            # Add DataFrame to report
-            report + df
-            
-            # Check that it was added
-            self.assertEqual(len(report.items), 1)
-            
-            # Render the report
-            report.show()
-            
-            # Check that the file was created
-            self.assertTrue(os.path.exists(test_file))
-            
-            # Check that the file contains the DataFrame data
-            with open(test_file, 'r') as f:
-                content = f.read()
-                self.assertIn("Alice", content)
-                self.assertIn("Bob", content)
-                self.assertIn("Charlie", content)
-                
-        finally:
-            # Clean up
-            if os.path.exists(test_dir):
-                try:
-                    shutil.rmtree(test_dir)
-                except (OSError, PermissionError):
-                    import time
-                    time.sleep(0.1)
-                    shutil.rmtree(test_dir)
+        # Create a simple DataFrame
+        df = self.pd.DataFrame({
+            'Name': ['Alice', 'Bob', 'Charlie'],
+            'Age': [25, 30, 35],
+            'City': ['New York', 'London', 'Paris']
+        })
+        
+        # Add DataFrame to report
+        report + df
+        
+        # Check that it was added
+        self.assertEqual(len(report.items), 1)
+        
+        # Render the report
+        report.show()
+        
+        # Check that the file was created
+        self.assertTrue(os.path.exists(self.test_file))
+        
+        # Check that the file contains the DataFrame data
+        with open(self.test_file, 'r') as f:
+            content = f.read()
+            self.assertIn("Alice", content)
+            self.assertIn("Bob", content)
+            self.assertIn("Charlie", content)
 
 
 if __name__ == '__main__':
