@@ -55,5 +55,8 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# Setuptools-scm version file
+otter/_version.py
+
 # PyBuilder
 target/

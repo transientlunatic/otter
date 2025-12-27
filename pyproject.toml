@@ -1,7 +1,79 @@
-[project]
-name = "Otter"
-
-
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=61.0", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "otter-report"
+dynamic = ["version"]
+description = "The simple HTML report generator for Python jobs."
+readme = "README.rst"
+license = {text = "ISC"}
+authors = [
+    {name = "Daniel Williams", email = "daniel.williams@glasgow.ac.uk"}
+]
+keywords = ["otter", "report", "html"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: ISC License (ISCL)",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "tabulate",
+    "jinja2",
+    "markdown",
+    "pyyaml",
+    "matplotlib",
+    "configparser",
+    "importlib_resources; python_version < '3.9'",
+    "importlib_metadata; python_version < '3.8'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "bumpversion==0.5.3",
+    "wheel==0.38.1",
+    "watchdog==0.8.3",
+    "flake8==2.4.1",
+    "tox==2.1.1",
+    "coverage==4.0",
+    "cryptography==43.0.1",
+    "tabulate==0.8.2",
+    "configparser",
+    "jinja2>=3.1.4",
+    "pygments>=2.15.0",
+    "PyYAML==5.4",
+]
+docs = [
+    "Sphinx>=4.0",
+    "numpydoc",
+    "sphinx-multiversion",
+]
+
+[project.urls]
+Homepage = "https://github.com/transientlunatic/otter"
+Documentation = "https://code.daniel-williams.co.uk/otter/"
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["otter*"]
+exclude = ["tests*", "docs*"]
+
+[tool.setuptools.package-data]
+otter = ["*.conf", "themes/**/*"]
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
+version_file = "otter/_version.py"
