@@ -28,34 +28,30 @@ classifiers = [
 requires-python = ">=3.7"
 dependencies = [
     "tabulate",
-    "jinja2",
+    "jinja2>=3.1.4",
     "markdown",
-    "pyyaml",
+    "pyyaml>=6.0",
     "matplotlib",
-    "configparser",
     "importlib_resources; python_version < '3.9'",
     "importlib_metadata; python_version < '3.8'",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "bumpversion==0.5.3",
-    "wheel==0.38.1",
-    "watchdog==0.8.3",
-    "flake8==2.4.1",
-    "tox==2.1.1",
-    "coverage==4.0",
-    "cryptography==43.0.1",
-    "tabulate==0.8.2",
-    "configparser",
-    "jinja2>=3.1.4",
+    "bumpversion>=0.6.0",
+    "wheel>=0.42",
+    "watchdog>=2.0",
+    "flake8>=6.0.0",
+    "tox>=3.28,<5",
+    "coverage>=6.5,<8",
+    "cryptography>=43.0.1",
     "pygments>=2.15.0",
-    "PyYAML==5.4",
 ]
 docs = [
     "Sphinx>=4.0",
     "numpydoc",
     "sphinx-multiversion",
+    "kentigern",
 ]
 
 [project.urls]
@@ -75,5 +71,6 @@ exclude = ["tests*", "docs*"]
 otter = ["*.conf", "themes/**/*"]
 
 [tool.setuptools_scm]
+tag_regex = "^v(?P<version>.*)$"
 local_scheme = "no-local-version"
 version_file = "otter/_version.py"

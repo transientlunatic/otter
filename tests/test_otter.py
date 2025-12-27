@@ -29,7 +29,13 @@ class TestOtterBasics(unittest.TestCase):
     def tearDown(self):
         """Clean up test fixtures."""
         if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+            try:
+                shutil.rmtree(self.test_dir)
+            except (OSError, PermissionError):
+                # On some platforms (e.g., Windows), files may not be released immediately.
+                import time
+                time.sleep(0.1)
+                shutil.rmtree(self.test_dir)
 
     def test_otter_creation(self):
         """Test that an Otter report can be created."""
@@ -113,8 +119,7 @@ class TestBootstrap(unittest.TestCase):
 
     def test_row_creation_with_list(self):
         """Test creating a row with list of column widths."""
-        # Note: This test is skipped as the current implementation 
-        # requires hclass to be iterable when cols is a list
+        # Providing an iterable hclass is required when cols is a list
         row = bt.Row([4, 4, 4], hclass=['', '', ''])
         self.assertEqual(len(row.columns), 3)
 
