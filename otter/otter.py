@@ -59,26 +59,18 @@ class Otter():
             try:
                 import importlib
                 theme = importlib.import_module(config.get("theme", "name"))
-            except:
+            except (ImportError, ModuleNotFoundError):
                 # If import fails, fall back to default theme
                 theme = None
         
         # If theme is still None, try to get location from config
-        if theme is None:
-            if config.has_option("theme", "location"):
-                try:
-                    theme = config.get("theme", "location")
-                except:
-                    theme = None
+        if theme is None and config.has_option("theme", "location"):
+            theme = config.get("theme", "location")
         
         # If still no theme, use default
         if theme is None:
             print("Cannot find theme in the config file. Using the default theme.")
-            try:
-                theme = str(files(__package__).joinpath("themes/default"))
-            except:
-                print("No theme files found.")
-                raise
+            theme = str(files(__package__).joinpath("themes/default"))
 
         self.env = Environment(loader=FileSystemLoader(theme))
         
