@@ -59,7 +59,7 @@ class Otter():
             try:
                 theme_module = importlib.import_module(config.get("theme", "name"))
                 # Try to get the path from the module
-                if hasattr(theme_module, '__path__') and theme_module.__path__:
+                if hasattr(theme_module, '__path__') and len(theme_module.__path__) > 0:
                     theme = theme_module.__path__[0]
                 elif hasattr(theme_module, '__file__'):
                     theme = os.path.dirname(theme_module.__file__)
