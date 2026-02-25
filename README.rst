@@ -56,11 +56,26 @@ This report was generated with just a small number of lines of Python: ::
 	       report + "##Subsection Header"
 	       report + "Fusce vel lectus ultricies,... "  
 
+Otter also supports pandas DataFrames (requires pandas to be installed): ::
+
+	   import pandas as pd
+
+	   df = pd.DataFrame({
+	       'Name': ['Alice', 'Bob', 'Charlie'],
+	       'Age': [25, 30, 35],
+	       'City': ['New York', 'London', 'Paris']
+	   })
+
+	   with report:
+	       report + "## Data Table"
+	       report + df
+
+The DataFrame will be automatically converted to a nicely formatted HTML table.
 
 Features
 --------
 
-* TODO Add support for pandas data tables
+* Support for pandas DataFrames (optional dependency)
 * TODO Add support for custom headers and footers
 
 Credits
