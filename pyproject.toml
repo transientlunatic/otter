@@ -22,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 requires-python = ">=3.9"
 dependencies = [
@@ -46,7 +47,9 @@ dev = [
     "twine",
 ]
 docs = [
-    "Sphinx>=4.0",
+    # sphinx-multiversion 0.2.4 is unmaintained and breaks on Sphinx 9
+    # (Config.read signature change); 8.2 is the newest tested working version.
+    "Sphinx>=4.0,<9",
     "numpydoc",
     "sphinx-multiversion",
     "kentigern",
