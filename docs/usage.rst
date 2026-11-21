@@ -1,4 +1,5 @@
 .. _quickstart:
+
 =================
 Quick Start Guide
 =================
@@ -31,7 +32,7 @@ Once we've set-up the report, we can start adding content to it. We recommend do
 
 This method of making the report means that you don't need to worry about explicitly writing-out the report; it's done automatically as we move through your script.
 
-When you add a string to the report it will just get added to the text. We can produce more useful formatting as well, which is covered in the :ref:`formatting` tutorial, but simple formatting can be performed by including Markdown in the string. For example, ::
+When you add a string to the report it will just get added to the text. We can produce more useful formatting as well, which is covered in the :ref:`advancedformatting` tutorial, but simple formatting can be performed by including Markdown in the string. For example, ::
 
   with report:
      report + "#Heading"

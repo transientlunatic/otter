@@ -1,31 +1,86 @@
-Unreleased
-==========
+v0.5.0
+======
+
+This release adds pandas support and a more robust way of turning Python objects into HTML, and fixes
+a number of long-standing bugs. CI, packaging and the documentation build have also been repaired.
+
+Breaking Changes
+----------------
+
+Two behaviours have changed which may affect existing scripts:
+
+* Objects which Otter has no handler for are now HTML-escaped. A custom class whose ``__repr__``
+  returned HTML, and which relied on it being inserted unchanged, should define an ``__html__`` method
+  instead (or be wrapped in ``otter.html.RawHTML``).
+* Adding content directly to a ``bootstrap.Row`` with more than one column now raises ``ValueError``
+  instead of silently discarding the content. Add to a column instead, for example ``row[0] + item``.
+
+New Features
+------------
+
+**Pandas DataFrame Support**
+  pandas DataFrames can be added to a report and are rendered as tables. pandas is optional:
+  ``pip install otter-report[pandas]``. (This was listed under 0.4.0 in earlier versions of this
+  file, but the 0.4.0 release did not contain it.)
+
+**Extensible object conversion**
+  Objects added to a report are matched on their type *and its parent types*, so subclasses such as
+  ``OrderedDict`` and ``Figure`` subclasses are handled. Objects with an ``__html__`` or a Jupyter-style
+  ``_repr_html_`` method are rendered using it, so many table and plotting libraries work without extra
+  code. ``otter.html.register_handler`` adds handlers for your own types.
+
+**Embedding custom HTML and JavaScript**
+  ``otter.html.RawHTML`` inserts HTML or JavaScript exactly as given, for example to embed a d3
+  visualisation.
+
+**SVG figures**
+  ``otter.plot.Figure(fig, fmt="svg")`` embeds a figure as a vector image.
 
 Changes
 -------
 
-**Object conversion**
-  Objects added to a report are now matched on their type *and its parent types*, so subclasses
-  such as ``OrderedDict`` and ``Figure`` subclasses are handled. Objects with a ``__html__`` or
-  ``_repr_html_`` method are rendered using it. ``otter.html.register_handler`` lets you add your own
-  types, and ``otter.html.RawHTML`` inserts HTML or JavaScript unescaped.
-
-**Escaping**
-  Objects with no handler, and element attributes, are now HTML-escaped. Custom classes which relied
-  on their ``__repr__`` being inserted as raw HTML should define ``__html__`` instead.
+**Writing reports**
+  Reports are written atomically, so a report being served while a job is still running is never seen
+  half-written. Files are written as UTF-8, keep normal permissions, and missing directories are created.
+  ``with report as r`` now gives you the report.
 
 **Figures**
-  ``otter.plot.Figure`` accepts ``fmt="svg"``, and its ``filename`` argument now works. Importing
-  Otter no longer switches the Matplotlib backend to Agg.
+  Importing Otter no longer switches the Matplotlib backend to Agg. The ``filename`` argument of
+  ``otter.plot.Figure``, which previously produced an empty image, now works.
 
-**Writing reports**
-  Reports are written atomically, using UTF-8, and missing directories are created. ``with report as r``
-  now gives you the report.
+**Dependencies**
+  ``numpy`` is now declared as a dependency, as ``otter.html`` imports it directly. The ``dev`` extra
+  now contains the tools used by CI (pytest, flake8, coverage, build, twine). The ``docs`` extra requires
+  ``Sphinx<9``, because ``sphinx-multiversion`` does not yet work with Sphinx 9.
 
-**Bug fixes**
-  Elements with several attributes produced invalid HTML, ``el += x`` replaced the element with a list,
-  and adding content directly to a multi-column ``bootstrap.Row`` silently did nothing; it now raises
-  ``ValueError``.
+**Python Version Support**
+  Python 3.13 is now tested and listed as supported.
+
+**CI and packaging**
+  The Tests workflow failed on every run because the leftover ``setup.py`` read a ``HISTORY.rst`` which
+  no longer existed; ``setup.py``, ``setup.cfg``, ``tox.ini``, the Travis configuration and the pinned
+  ``requirements*.txt`` files have been removed in favour of ``pyproject.toml``. Tests now run with
+  pytest on Python 3.9 to 3.13. Releases are built from ``v*`` tags and published to PyPI using trusted
+  publishing.
+
+**Documentation**
+  The documentation workflow no longer fails when building all versions on ``main``, and also deploys a
+  root page which redirects to the newest release. Broken cross-references and the missing API page link
+  have been fixed, and the usage guide has a new "Extending Otter" section.
+
+Bug Fixes
+---------
+
+* Elements with several attributes produced invalid HTML.
+* ``el += x`` replaced the element with a list.
+* Attribute values were not escaped.
+
+GitHub Pull Requests
+--------------------
+
++ `github#27 <https://github.com/transientlunatic/otter/pull/27>`_: Redesign object conversion, escaping, figures and report writing
++ `github#26 <https://github.com/transientlunatic/otter/pull/26>`_: Fix CI and packaging; include pandas support
++ `github#24 <https://github.com/transientlunatic/otter/pull/24>`_: Add pandas DataFrame support for table rendering in reports
 
 v0.4.0
 ======
@@ -38,9 +93,6 @@ This release is not believed to introduce any backwards-incompatible changes.
 
 New Features
 ------------
-
-**Pandas DataFrame Support**
-  Otter now supports rendering pandas DataFrames directly in reports, making it easier to include tabular data from pandas workflows.
 
 **Package Modernization**
   The package has been modernized with migration to pyproject.toml, comprehensive unit tests, sphinx-multiversion documentation support, and CI/CD improvements.

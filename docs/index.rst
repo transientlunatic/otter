@@ -68,6 +68,7 @@ Contents
    usage
    formatting
    multiversion
+   modules
    contributing
    authors
    history

@@ -34,6 +34,14 @@ jobs:
       if: github.event_name == 'push'
       run: make -C docs multi
 
+    - name: Add a root page redirecting to the newest release (or main)
+      if: github.event_name == 'push'
+      run: |
+        cd docs/_build/html
+        latest=$(ls -d v*/ 2>/dev/null | tr -d '/' | sort -V | tail -n 1)
+        latest=${latest:-main}
+        printf '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=%s/index.html"><link rel="canonical" href="%s/index.html"><a href="%s/index.html">Otter documentation</a>\n' "$latest" "$latest" "$latest" > index.html
+
     - name: Upload documentation artifact
       uses: actions/upload-artifact@v4
       with:
