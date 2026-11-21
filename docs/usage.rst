@@ -78,3 +78,41 @@ The DataFrame will be automatically converted to a nicely formatted HTML table w
 
 Note: pandas is an optional dependency. Install it with ``pip install pandas`` or ``pip install otter-report[pandas]`` to enable DataFrame support.
 
+
+Extending Otter
+^^^^^^^^^^^^^^^
+
+When you add an object to a report Otter converts it to HTML in this order:
+
+1. Otter's own elements (``otter.bootstrap.Row``, ``Card``, ...) are used as they are.
+2. Objects with an ``__html__`` method are trusted to already be HTML.
+3. Handlers registered for the object's type, *or any parent type*, so a subclass of ``dict`` is
+   shown as a table just like a ``dict``.
+4. Objects with a ``_repr_html_`` method, the same convention Jupyter uses. Many table and plotting
+   libraries already provide this, so they work in a report without any extra code.
+5. Anything else is shown as escaped plain text.
+
+You can teach Otter about your own types with ``register_handler``: ::
+
+  from otter.html import register_handler
+
+  register_handler(Posterior, lambda p: p.summary_table())
+
+To include HTML or JavaScript which you've written yourself, such as a d3 visualisation, wrap it in
+``RawHTML``. It is inserted into the page exactly as given, so only use it for content you trust: ::
+
+  from otter.html import RawHTML
+
+  with report:
+     report + RawHTML("<div id='chart'></div><script src='chart.js'></script>")
+
+Matplotlib figures are embedded as PNG images by default. For line plots an SVG is usually smaller
+and stays sharp when zoomed: ::
+
+  from otter.plot import Figure
+
+  with report:
+     report + Figure(fig, fmt="svg")
+
+Reports are written atomically, so a page being served from a web server while a long job is still
+running is never seen half-written.

@@ -43,8 +43,9 @@ class Row(HTMLElement):
         if len(self.columns)==1:
             self.columns[0] + item
         else:
-            # Need to throw an error
-            pass
+            raise ValueError(
+                "This row has {} columns; add content to a column with row[i] + item".format(len(self.columns))
+            )
         
             
     def __getitem__(self, i):

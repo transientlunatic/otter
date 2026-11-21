@@ -2,6 +2,8 @@
 
 #import uuid
 import os
+import stat
+import tempfile
 import importlib
 from .html import *
 from configparser import ConfigParser
@@ -92,9 +94,9 @@ class Otter():
 
         Right now, Otter doesn't actually need anything to be done at the 
         creation of a context, but that should really change at some point in
-        the future.
+        the future. The report is returned so that ``with report as r:`` works.
         """
-        pass
+        return self
 
     def __exit__(self, type, value, traceback):
         """
@@ -106,7 +108,7 @@ class Otter():
         return self.add(item)
         
     def add(self, item):
-        if HTMLElement in type(item).mro():
+        if isinstance(item, HTMLElement):
             self.items.append(item)
         else:
             item_ = HTMLElement()
@@ -122,20 +124,30 @@ class Otter():
         self._write(output_html)
         
     def _write(self, text):
-        with open(self.reportfile, "w") as f:
-            f.write(text)
-
-    def _mkdir_recursive(self, path):
         """
-        Recursively create the directories required for the report.
-        Based off code from http://stackoverflow.com/questions/6004073/how-can-i-create-directories-recursively
-        by `Mars'.
+        Write the report to disk atomically, so that someone reading a report
+        from a web server while a long job is still running never sees a
+        half-written file. The directory is created if it doesn't exist.
         """
-        sub_path = os.path.dirname(path)
-        if not os.path.exists(sub_path):
-            self._mkdir_recursive(sub_path)
-        if not os.path.exists(path):
-            os.mkdir(path)
+        directory = os.path.dirname(os.path.abspath(self.reportfile))
+        os.makedirs(directory, exist_ok=True)
 
+        # Keep the permissions of an existing report, or use the umask default,
+        # so that the web server can still read the file (mkstemp makes it 0600).
+        try:
+            mode = stat.S_IMODE(os.stat(self.reportfile).st_mode)
+        except FileNotFoundError:
+            umask = os.umask(0)
+            os.umask(umask)
+            mode = 0o666 & ~umask
 
-
+        fd, tmp = tempfile.mkstemp(dir=directory, prefix=".otter-", suffix=".tmp")
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
+                f.write(text)
+            os.chmod(tmp, mode)
+            os.replace(tmp, self.reportfile)
+        except BaseException:
+            if os.path.exists(tmp):
+                os.unlink(tmp)
+            raise
