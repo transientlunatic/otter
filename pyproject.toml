@@ -30,6 +30,7 @@ dependencies = [
     "markdown",
     "pyyaml>=6.0",
     "matplotlib",
+    "numpy",
 ]
 
 [project.optional-dependencies]
@@ -37,14 +38,12 @@ pandas = [
     "pandas",
 ]
 dev = [
-    "bumpversion>=0.6.0",
-    "wheel>=0.42",
-    "watchdog>=2.0",
+    "pytest>=7.0",
+    "pandas",
     "flake8>=6.0.0",
-    "tox>=3.28,<5",
     "coverage>=6.5,<8",
-    "cryptography>=43.0.1",
-    "pygments>=2.15.0",
+    "build",
+    "twine",
 ]
 docs = [
     "Sphinx>=4.0",

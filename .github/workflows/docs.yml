@@ -2,36 +2,50 @@ name: Documentation
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ main ]
+    tags: [ 'v*' ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ main ]
 
 jobs:
   build-docs:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Required for setuptools_scm and sphinx-multiversion
-    
+        fetch-depth: 0  # setuptools_scm and sphinx-multiversion need full history and tags
+
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
-    
+        python-version: '3.12'
+        cache: pip
+        cache-dependency-path: pyproject.toml
+
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install -e ".[docs]"
-    
-    - name: Build documentation
-      run: |
-        cd docs
-        make html
-    
-    - name: Upload documentation artifacts
+      run: python -m pip install -e ".[docs]"
+
+    - name: Build documentation (single version, fails on build errors)
+      if: github.event_name == 'pull_request'
+      run: make -C docs html
+
+    - name: Build documentation (all versions)
+      if: github.event_name == 'push'
+      run: make -C docs multi
+
+    - name: Upload documentation artifact
       uses: actions/upload-artifact@v4
       with:
         name: documentation
         path: docs/_build/html/
+
+    - name: Deploy documentation
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: horochx/deploy-via-scp@v1.0.1
+      with:
+        local: docs/_build/html/
+        remote: /home/danwilliams/code.daniel-williams.co.uk/otter
+        host: ${{ secrets.sshhost }}
+        user: ${{ secrets.sshuser }}
+        key: ${{ secrets.sshkey }}
