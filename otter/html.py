@@ -4,6 +4,14 @@ from . import plot
 import markdown
 import tabulate
 
+# Try to import pandas, but make it optional
+try:
+    import pandas as pd
+    PANDAS_AVAILABLE = True
+except ImportError:
+    pd = None
+    PANDAS_AVAILABLE = False
+
 md_extensions = [
     'markdown.extensions.tables',
     'markdown.extensions.extra'
@@ -84,14 +92,6 @@ def dict_to_table(dictionary):
         table + Row([key, val])
     return table
 
-handlers = {
-    str: lambda x: markdown.markdown(str(x), output_format='xhtml5', extensions=md_extensions),
-    matplotlib.figure.Figure: plot.Figure,
-    list: OrderedList,
-    dict: dict_to_table,
-    numpy.ndarray: lambda x: tabulate.tabulate(x, tablefmt=MyHTMLFormat)
-}
-
 from functools import partial
 def my_html_row_with_attrs(celltag, cell_values, colwidths, colaligns):
     alignment = { "left":    '',
@@ -113,3 +113,19 @@ MyHTMLFormat = tabulate.TableFormat(
         headerrow=partial(my_html_row_with_attrs, "th"),
         datarow=partial(my_html_row_with_attrs, "td"),
         padding=0, with_header_hide=None)
+
+def dataframe_to_table(df):
+    """Convert a pandas DataFrame to an HTML table using tabulate."""
+    return tabulate.tabulate(df, headers='keys', tablefmt=MyHTMLFormat)
+
+handlers = {
+    str: lambda x: markdown.markdown(str(x), output_format='xhtml5', extensions=md_extensions),
+    matplotlib.figure.Figure: plot.Figure,
+    list: OrderedList,
+    dict: dict_to_table,
+    numpy.ndarray: lambda x: tabulate.tabulate(x, tablefmt=MyHTMLFormat)
+}
+
+# Add pandas DataFrame handler if pandas is available
+if PANDAS_AVAILABLE:
+    handlers[pd.DataFrame] = dataframe_to_table
