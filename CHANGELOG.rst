@@ -1,3 +1,32 @@
+Unreleased
+==========
+
+Changes
+-------
+
+**Object conversion**
+  Objects added to a report are now matched on their type *and its parent types*, so subclasses
+  such as ``OrderedDict`` and ``Figure`` subclasses are handled. Objects with a ``__html__`` or
+  ``_repr_html_`` method are rendered using it. ``otter.html.register_handler`` lets you add your own
+  types, and ``otter.html.RawHTML`` inserts HTML or JavaScript unescaped.
+
+**Escaping**
+  Objects with no handler, and element attributes, are now HTML-escaped. Custom classes which relied
+  on their ``__repr__`` being inserted as raw HTML should define ``__html__`` instead.
+
+**Figures**
+  ``otter.plot.Figure`` accepts ``fmt="svg"``, and its ``filename`` argument now works. Importing
+  Otter no longer switches the Matplotlib backend to Agg.
+
+**Writing reports**
+  Reports are written atomically, using UTF-8, and missing directories are created. ``with report as r``
+  now gives you the report.
+
+**Bug fixes**
+  Elements with several attributes produced invalid HTML, ``el += x`` replaced the element with a list,
+  and adding content directly to a multi-column ``bootstrap.Row`` silently did nothing; it now raises
+  ``ValueError``.
+
 v0.4.0
 ======
 
